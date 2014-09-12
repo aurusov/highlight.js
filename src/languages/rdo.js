@@ -5,7 +5,7 @@ Language: rdo
 function(hljs) {
   return {
     case_insensitive: true,
-    lexems: '[a-zA-Z_$][a-zA-Z0-9_]*',
+    lexemes: /[a-zA-Z_$][a-zA-Z0-9_]*/,
     keywords: {
       keyword: '$Activities $Back_picture $Body $Changes $Compare_tops $Condition ' +
                '$Constant $Decision_point $Default $End $End_picture $Evaluate_by $Frame $Function ' +
