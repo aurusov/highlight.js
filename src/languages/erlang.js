@@ -2,6 +2,7 @@
 Language: Erlang
 Description: Erlang is a general-purpose functional language, with strict evaluation, single assignment, and dynamic typing.
 Author: Nikolay Zakharov <nikolay.desh@gmail.com>, Dmitry Kovega <arhibot@gmail.com>
+Category: functional
 */
 
 function(hljs) {
@@ -15,10 +16,7 @@ function(hljs) {
       'false true'
   };
 
-  var COMMENT = {
-    className: 'comment',
-    begin: '%', end: '$'
-  };
+  var COMMENT = hljs.COMMENT('%', '$');
   var NUMBER = {
     className: 'number',
     begin: '\\b(\\d+#[a-fA-F0-9]+|\\d+(\\.\\d+)?([eE][-+]?\\d+)?)',
