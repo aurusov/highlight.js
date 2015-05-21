@@ -8,7 +8,7 @@ function(hljs) {
     lexemes: /[a-zA-Z_$][a-zA-Z0-9_]*/,
     keywords: {
       keyword: 'type relevantSet operation keyboard rule relevant event any ' +
-        'dpt set activity is search ' +
+        'dpt set activity checks search ' +
         'sequence enumerative legacy uniform exponential normal triangular hist constant ' +
         'function algorithmic table list result ' +
         'frame background if else for text rect line circle ellipse triang ' +
@@ -19,7 +19,7 @@ function(hljs) {
       built_in:'select first withMin withMax setValueBefore setValueAfter ' +
         'setParent setCondition setPriority setTerminateCondition evaluateBy ' +
         'compareTops terminateCondition init watchParameter watchState watchQuant ' +
-        'watchValue getValue duration begin end execute stopping planning ' +
+        'watchValue getValue duration begin end execute stop plan ' +
         'create erase currentTime'
     },
     contains: [
