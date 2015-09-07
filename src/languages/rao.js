@@ -9,7 +9,7 @@ function(hljs) {
     keywords: {
       keyword: 'type relevantSet operation keyboard rule relevant event any ' +
         'dpt set activity checks search ' +
-        'sequence enumerative legacy uniform exponential normal triangular hist constant ' +
+        'sequence enumerative legacy uniform exponential normal triangular histogram constant ' +
         'function algorithmic table list result ' +
         'frame background if else for text rect line circle ellipse triang ' +
         'enum int double boolean ' +
