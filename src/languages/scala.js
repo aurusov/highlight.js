@@ -31,7 +31,7 @@ function(hljs) {
     className: 'title',
     begin: /[^0-9\n\t "'(),.`{}\[\]:;][^\n\t "'(),.`{}\[\]:;]+|[^0-9\n\t "'(),.`{}\[\]:;=]/,
     relevance: 0
-  }
+  };
 
   var CLASS = {
     className: 'class',
@@ -47,20 +47,10 @@ function(hljs) {
     contains: [NAME]
   };
 
-  var JAVADOC = {
-    className: 'javadoc',
-    begin: '/\\*\\*', end: '\\*/',
-    contains: [{
-      className: 'javadoctag',
-      begin: '@[A-Za-z]+'
-    }],
-    relevance: 10
-  };
-
   return {
     keywords: {
       literal: 'true false null',
-      keyword: 'type yield lazy override def with val var sealed abstract private trait object if forSome for while throw finally protected extends import final return else break new catch super class case package default try this match continue throws'
+      keyword: 'type yield lazy override def with val var sealed abstract private trait object if forSome for while throw finally protected extends import final return else break new catch super class case package default try this match continue throws implicit'
     },
     contains: [
       hljs.C_LINE_COMMENT_MODE,

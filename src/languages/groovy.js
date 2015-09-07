@@ -11,25 +11,27 @@ function(hljs) {
             typename: 'byte short char int long boolean float double void',
             literal : 'true false null',
             keyword:
-                // groovy specific keywords
+            // groovy specific keywords
             'def as in assert trait ' +
-                // common keywords with Java
+            // common keywords with Java
             'super this abstract static volatile transient public private protected synchronized final ' +
             'class interface enum if else for while switch case break default continue ' +
             'throw throws try catch finally implements extends new import package return instanceof'
         },
 
         contains: [
+            hljs.COMMENT(
+                '/\\*\\*',
+                '\\*/',
+                {
+                    relevance : 0,
+                    contains : [{
+                        className : 'doctag',
+                        begin : '@[A-Za-z]+'
+                    }]
+                }
+            ),
             hljs.C_LINE_COMMENT_MODE,
-            {
-                className: 'javadoc',
-                begin: '/\\*\\*', end: '\\*//*',
-                contains: [
-                    {
-                        className: 'javadoctag', begin: '@[A-Za-z]+'
-                    }
-                ]
-            },
             hljs.C_BLOCK_COMMENT_MODE,
             {
                 className: 'string',
@@ -64,13 +66,8 @@ function(hljs) {
                 beginKeywords: 'class interface trait enum', end: '{',
                 illegal: ':',
                 contains: [
-                    {
-                        beginKeywords: 'extends implements'
-                    },
-                    {
-                        className: 'title',
-                        begin: hljs.UNDERSCORE_IDENT_RE
-                    }
+                    {beginKeywords: 'extends implements'},
+                    hljs.UNDERSCORE_TITLE_MODE,
                 ]
             },
             hljs.C_NUMBER_MODE,
@@ -88,7 +85,8 @@ function(hljs) {
             },
             {
                 // highlight labeled statements
-                className: 'label', begin: '^\\s*[A-Za-z0-9_$]+:'
+                className: 'label', begin: '^\\s*[A-Za-z0-9_$]+:',
+                relevance: 0
             },
         ]
     }
