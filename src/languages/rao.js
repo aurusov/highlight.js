@@ -11,7 +11,7 @@ function(hljs) {
         'dpt set activity checks search ' +
         'sequence enumerative legacy uniform exponential normal triangular histogram constant ' +
         'function algorithmic table list result ' +
-        'frame background if else for text rect line circle ellipse triang ' +
+        'frame background if else for text rectangle line circle ellipse triangle color ' +
         'enum int double boolean ' +
         'String array break return resource or ' +
         'and mod not exist notExist forAll except empty size',
