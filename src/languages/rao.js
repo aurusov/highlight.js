@@ -14,7 +14,7 @@ function(hljs) {
         'frame background if else for text rectangle line circle ellipse triangle color ' +
         'enum int double boolean ' +
         'String array break return resource or ' +
-        'and mod not exist notExist forAll except empty size left center right',
+        'and mod not exist notExist forAll except empty size left center right Alignment',
       constant: 'true false',
       built_in:'select first withMin withMax setValueBefore setValueAfter ' +
         'setParent setCondition setPriority setTerminateCondition evaluateBy ' +
