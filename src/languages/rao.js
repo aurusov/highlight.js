@@ -20,7 +20,7 @@ function(hljs) {
       constant: 'true false',
       built_in:'select first withMin withMax setValueBefore setValueAfter ' +
         'setParent setCondition setPriority setTerminateCondition evaluateBy ' +
-        'compareTops terminateCondition init watchParameter watchState watchQuant ' +
+        'compareTops terminateCondition init watchParameter watchState watchQuantity ' +
         'watchValue getValue duration begin end execute stop plan ' +
         'create erase currentTime'
     },
