@@ -1,21 +1,17 @@
 'use strict';
 
-var fs      = require('fs');
-var utility = require('../utility');
-
-var block;
+let utility = require('../utility');
 
 describe('sub-languages', function() {
   before(function() {
-    block = document.querySelector('#sublanguages');
+    this.block = document.querySelector('#sublanguages');
   });
 
   it('should highlight XML with PHP and JavaScript', function() {
-    var filename = utility.buildPath('expect', 'sublanguages.txt'),
+    const filename = utility.buildPath('fixtures', 'expect',
+                                     'sublanguages.txt'),
+          actual   = this.block.innerHTML;
 
-        expected = fs.readFileSync(filename, 'utf-8'),
-        actual   = block.innerHTML;
-
-    actual.should.equal(expected);
+    return utility.expectedFile(filename, 'utf-8', actual);
   });
 });

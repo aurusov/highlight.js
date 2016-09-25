@@ -1,84 +1,116 @@
 'use strict';
 
-var _    = require('lodash');
-var path = require('path');
+let _        = require('lodash');
+let bluebird = require('bluebird');
+let readFile = bluebird.promisify(require('fs').readFile);
+let path     = require('path');
 
-var utility  = require('./utility');
+let registry = require('./tasks');
+let utility  = require('./utility');
 
-var directory;
+let directory;
+
+function templateAllFunc(blobs) {
+  const name = path.join('demo', 'index.html');
+
+  blobs = _.compact(blobs);
+
+  return bluebird.join(
+    readFile(name),
+    utility.getStyleNames(),
+    (template, styles) => ({ template, path, blobs, styles })
+  );
+}
 
 function copyDocs() {
-  var input  = path.join(directory.root, 'docs', '*.rst'),
-      output = path.join(directory.build, 'docs');
+  const input  = path.join(directory.root, 'docs', '*.rst'),
+        output = path.join(directory.build, 'docs');
 
   return {
-    logDocs: { task: ['log', 'Copying documentation.'] },
-    readDocs: {
-      requires: 'logDocs',
-      task: ['glob', utility.glob(input)]
-    },
-    writeDocsLog: {
-      requires: 'readDocs',
-      task: ['log', 'Writing documentation.']
-    },
-    writeDocs: { requires: 'writeDocsLog', task: ['dest', output] }
+    startLog: { task: ['log', 'Copying documentation.'] },
+    read: { requires: 'startLog', task: ['glob', utility.glob(input)] },
+    writeLog: { requires: 'read', task: ['log', 'Writing documentation.'] },
+    write: { requires: 'writeLog', task: ['dest', output] }
   };
 }
 
-function generateDemo(filterCB) {
-  var readArgs   = utility.glob(path.join('src', 'languages', '*.js')),
-      staticArgs = utility.glob(path.join('demo', '*.{js,css}')),
-      stylesArgs = utility.glob(path.join('src', 'styles', '*'), 'bin'),
-      demoRoot   = path.join(directory.build, 'demo');
+function generateDemo(filterCB, readArgs) {
+  let styleDir     = path.join('src', 'styles'),
+      staticArgs   = utility.glob(path.join('demo', '*.min.{js,css}')),
+      imageArgs    = utility.glob(path.join(styleDir,  '*.{png,jpg}'),
+                                  'binary'),
+      stylesArgs   = utility.glob(path.join(styleDir,  '*.css')),
+      demoRoot     = path.join(directory.build, 'demo'),
+      templateArgs = { callback: templateAllFunc },
+      destArgs     = {
+        dir: path.join(demoRoot, 'styles'),
+        encoding: 'binary'
+      };
 
   return {
-    logDemoStart: { task: ['log', 'Generating demo.'] },
-
-    readLanguages: { requires: 'logDemoStart', task: ['glob', readArgs] },
+    logStart: { task: ['log', 'Generating demo.'] },
+    readLanguages: { requires: 'logStart', task: ['glob', readArgs] },
     filterSnippets: { requires: 'readLanguages', task: ['filter', filterCB] },
     readSnippet: { requires: 'filterSnippets', task: 'readSnippet' },
-    templateDemo: { requires: 'readSnippet', task: 'templateDemo' },
-    writeDemo: {
-      requires: 'templateDemo',
-      task: ['write', path.join(demoRoot, 'index.html')] },
-
-    readStatic: { requires: 'logDemoStart', task: ['glob', staticArgs] },
+    template: {
+      requires: 'readSnippet',
+      task: ['templateAll', templateArgs]
+    },
+    write: {
+      requires: 'template',
+      task: ['write', path.join(demoRoot, 'index.html')]
+    },
+    readStatic: { requires: 'logStart', task: ['glob', staticArgs] },
     writeStatic: { requires: 'readStatic', task: ['dest', demoRoot] },
-
-    readStyles: { requires: 'logDemoStart', task: ['glob', stylesArgs] },
-    writeStyles: {
-      requires: 'readStyles',
-      task: ['dest', path.join(demoRoot, 'styles')]
-    }
+    readStyles: { requires: 'logStart', task: ['glob', stylesArgs] },
+    compressStyles: { requires: 'readStyles', task: 'cssminify' },
+    writeStyles: { requires: 'compressStyles', task: ['dest', destArgs] },
+    readImages: { requires: 'logStart', task: ['glob', imageArgs] },
+    writeImages: { requires:'readImages', task: ['dest', destArgs] },
+    readDemoJS: {
+      requires: 'logStart',
+      task: ['read', path.join('demo', 'demo.js')]
+    },
+    minifyDemoJS: { requires: 'readDemoJS', task: 'jsminify' },
+    writeDemoJS: { requires: 'minifyDemoJS', task: ['dest', demoRoot] },
+    readDemoCSS: {
+      requires: 'logStart',
+      task: ['read', path.join('demo', 'style.css')]
+    },
+    minifyDemoCSS: { requires: 'readDemoCSS', task: 'cssminify' },
+    writeDemoCSS: { requires: 'minifyDemoCSS', task: ['dest', demoRoot] }
   };
 }
 
 module.exports = function(commander, dir) {
   directory = dir;
 
-  var hljsExt, output, requiresTask, tasks,
+  let hljsExt, output, requiresTask, tasks,
       replace           = utility.replace,
       regex             = utility.regex,
       replaceClassNames = utility.replaceClassNames,
 
-      readArgs     = utility.glob(path.join('src', '**', '*.js')),
+      coreFile     = path.join('src', 'highlight.js'),
+      languages    = utility.glob(path.join('src', 'languages', '*.js')),
       filterCB     = utility.buildFilterCallback(commander.args),
       replaceArgs  = replace(regex.header, ''),
-      templateArgs = { template: 'hljs.registerLanguage(' +
-                          '\'<%= name %>\', <%= content %>);\n'
-                     , skip: 'highlight'
-                     };
+      templateArgs =
+        'hljs.registerLanguage(\'<%= name %>\', <%= content %>);\n';
 
   tasks = {
-    startlog: { task: ['log', 'Building highlight.js pack file.'] },
-    read: { requires: 'startlog', task: ['glob', readArgs] },
+    startLog: { task: ['log', 'Building highlight.js pack file.'] },
+    readCore: { requires: 'startLog', task: ['read', coreFile] },
+    read: { requires: 'startLog', task: ['glob', languages] },
     filter: { requires: 'read', task: ['filter', filterCB] },
     reorder: { requires: 'filter', task: 'reorderDeps' },
     replace: { requires: 'reorder', task: ['replace', replaceArgs] },
     template: { requires: 'replace', task: ['template', templateArgs] },
-    concat: { requires: 'template', task: 'concat' }
+    packageFiles: {
+      requires: ['readCore', 'template'],
+      task: 'packageFiles'
+    }
   };
-  requiresTask = 'concat';
+  requiresTask = 'packageFiles';
 
   if(commander.compress || commander.target === 'cdn') {
     tasks.compresslog = {
@@ -102,22 +134,27 @@ module.exports = function(commander, dir) {
     requiresTask  = 'minify';
   }
 
-  tasks.writelog = {
+  tasks.insertLicenseTag = {
     requires: requiresTask,
+    task: 'insertLicenseTag'
+  };
+
+  tasks.writelog = {
+    requires: 'insertLicenseTag',
     task: ['log', 'Writing highlight.js pack file.']
   };
 
   hljsExt = commander.target === 'cdn' ? 'min' : 'pack';
-  output  = path.join(directory.build, 'highlight.' + hljsExt + '.js');
+  output  = path.join(directory.build, `highlight.${hljsExt}.js`);
 
   tasks.write = {
     requires: 'writelog',
     task: ['write', output]
   };
 
-  if(commander.target === 'browser') {
-    tasks = _.merge(copyDocs(), generateDemo(filterCB), tasks);
-  }
+  tasks = (commander.target === 'browser')
+        ? [copyDocs(), generateDemo(filterCB, languages), tasks]
+        : [tasks];
 
-  return tasks;
+  return utility.toQueue(tasks, registry);
 };

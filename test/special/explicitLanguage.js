@@ -1,43 +1,44 @@
 'use strict';
 
-var fs      = require('fs');
-var utility = require('../utility');
-
-var blocks, expected;
+let utility = require('../utility');
 
 describe('explicit language class', function() {
   before(function() {
-    var filename = utility.buildPath('expect', 'explicit.txt'),
-        testHTML = document.querySelector('#explicit-language');
+    const filename = utility.buildPath('fixtures', 'expect', 'explicit1.txt'),
+          testHTML = document.querySelectorAll('#explicit-language .hljs');
 
-    expected = fs.readFileSync(filename, 'utf-8');
-    blocks   = testHTML.querySelectorAll('.hljs');
+    return utility.setupFile(filename, 'utf-8', this, testHTML);
   });
 
   it('should highlight block with language in code tag', function() {
-    var actual = blocks[0].innerHTML;
+    const actual = this.blocks[0];
 
-    actual.should.equal(expected);
+    actual.should.equal(this.expected);
   });
 
   it('should highlight block with language in pre tag', function() {
-    var actual = blocks[1].innerHTML;
+    const actual = this.blocks[1];
 
-    actual.should.equal(expected);
+    actual.should.equal(this.expected);
   });
 
   it('should highlight using html 5 style (language-*)', function() {
-    var actual = blocks[2].innerHTML;
+    const actual = this.blocks[2];
 
-    actual.should.equal(expected);
+    actual.should.equal(this.expected);
   });
 
   it('should highlight with shortened prefix (lang-)', function() {
-    var filename = utility.buildPath('expect', 'shortenedexplicit.txt'),
+    const filename = utility.buildPath('fixtures', 'expect', 'explicit2.txt'),
+          actual   = this.blocks[3];
 
-        expected = fs.readFileSync(filename, 'utf-8'),
-        actual   = blocks[3].innerHTML;
+    return utility.expectedFile(filename, 'utf-8', actual);
+  });
 
-    actual.should.equal(expected);
+  it('should highlight if classname contains uppercase symbols', function() {
+    const filename = utility.buildPath('fixtures', 'expect', 'explicit2.txt'),
+          actual   = this.blocks[4];
+
+    return utility.expectedFile(filename, 'utf-8', actual);
   });
 });
