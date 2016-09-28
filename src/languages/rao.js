@@ -7,10 +7,10 @@ function(hljs) {
 		case_insensitive: true,
 		lexemes: /[a-zA-Z_$][a-zA-Z0-9_]*/,
 		keywords: {
-			keyword: 'type new operation rule relevant event ' +
+			keyword: 'type new operation rule event relevant relevants combination of types ' +
 					'logic edge set activity search sequence constant ' +
-					'result resultType var if else for ' +
-					'enum int double boolean Value ' +
+					'result resultType var val if else for switch case default ' +
+					'enum int long double Integer boolean as Value ' +
 					'String array break return resource ' +
 					'frame background drawText drawRectangle drawLine drawCircle drawEllipse drawTriangle ' +
 					'RaoColor BLACK BLUE CYAN DARK_BLUE DARK_CYAN DARK_GRAY DARK_GREEN DARK_MAGENTA DARK_RED ' +
@@ -18,9 +18,10 @@ function(hljs) {
 					'Alignment LEFT CENTER RIGHT',
 			constant: 'true false',
 			built_in:'accessible all filter any onlyif exists forall next minBySafe maxBySafe ' +
+					'condition parent priority ' +
 					'startCondition heuristic compareTops terminateCondition init draw ' +
-					'DiscreteHistogram Uniform Exponential Normal Triangular ' +
-					'duration begin end execute stop plan ' +
+					'DiscreteHistogram ContinuousHistogram Values Uniform Exponential Normal Triangular ' +
+					'duration begin end execute stop plan evaluate ' +
 					'create erase currentTime'
 		},
 		contains: [
