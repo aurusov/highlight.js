@@ -8,7 +8,7 @@ function(hljs) {
 		lexemes: /[a-zA-Z_$][a-zA-Z0-9_]*/,
 		keywords: {
 			keyword: 'type new operation rule event relevant relevants combination of types ' +
-					'logic edge set activity search sequence constant ' +
+					'logic edge def activity search sequence constant ' +
 					'result resultType var val if else for switch case default ' +
 					'enum int long double Integer boolean as Value ' +
 					'String array break return resource ' +
