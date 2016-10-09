@@ -12,7 +12,7 @@ function(hljs) {
 					'result resultType var val if else for switch case default ' +
 					'enum int long double Integer boolean as Value ' +
 					'String array break return resource ' +
-					'frame background drawText drawRectangle drawLine drawCircle drawEllipse drawTriangle ' +
+					'frame background drawText drawRectangle drawLine drawCircle drawEllipse drawTriangle drawImage ' +
 					'RaoColor BLACK BLUE CYAN DARK_BLUE DARK_CYAN DARK_GRAY DARK_GREEN DARK_MAGENTA DARK_RED ' +
 					'DARK_YELLOW GRAY GREEN MAGENTA RED WHITE YELLOW ' +
 					'Alignment LEFT CENTER RIGHT',
@@ -22,7 +22,7 @@ function(hljs) {
 					'startCondition heuristic compareTops terminateCondition init draw ' +
 					'DiscreteHistogram ContinuousHistogram Values Uniform Exponential Normal Triangular ' +
 					'duration begin end execute stop plan evaluate ' +
-					'create erase currentTime'
+					'create erase currentTime log'
 		},
 		contains: [
 			hljs.C_LINE_COMMENT_MODE,
