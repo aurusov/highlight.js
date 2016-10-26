@@ -9,20 +9,20 @@ function(hljs) {
 		keywords: {
 			keyword: 'type new operation rule event relevant relevants combination of types ' +
 					'logic edge def activity search sequence constant ' +
-					'result resultType var val if else for switch case default ' +
-					'enum int long double Integer boolean as Value ' +
+					'result dataSource var val if else for switch case default ' +
+					'enum int long double Integer boolean as ' +
 					'String array break return resource ' +
 					'frame background drawText drawRectangle drawLine drawCircle drawEllipse drawTriangle drawImage ' +
 					'RaoColor BLACK BLUE CYAN DARK_BLUE DARK_CYAN DARK_GRAY DARK_GREEN DARK_MAGENTA DARK_RED ' +
 					'DARK_YELLOW GRAY GREEN MAGENTA RED WHITE YELLOW ' +
-					'Alignment LEFT CENTER RIGHT',
+					'Alignment LEFT CENTER RIGHT ResultMode AUTO MANUAL',
 			constant: 'true false',
 			built_in:'accessible all filter any onlyif exists forall next minBySafe maxBySafe ' +
 					'condition parent priority ' +
 					'startCondition heuristic compareTops terminateCondition init draw ' +
 					'DiscreteHistogram ContinuousHistogram Values Uniform Exponential Normal Triangular ' +
 					'duration begin end execute stop plan evaluate ' +
-					'create erase currentTime log'
+					'create erase currentTime log update'
 		},
 		contains: [
 			hljs.C_LINE_COMMENT_MODE,
