@@ -19,7 +19,8 @@ function(hljs) {
 			constant: 'true false',
 			built_in:'accessible all filter any onlyif exists forall next minBySafe maxBySafe ' +
 					'condition parent priority ' +
-					'startCondition heuristic compareTops terminateCondition init draw ' +
+					'startCondition heuristic compareTops terminateCondition init ' +
+					'draw mouseDown mouseUp mouseMove mouseDoubleClick mouseScrolled keyReleased keyPressed ' +
 					'DiscreteHistogram ContinuousHistogram Values Uniform Exponential Normal Triangular ' +
 					'duration begin end execute stop plan evaluate ' +
 					'create erase currentTime log update'
